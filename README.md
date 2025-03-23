@@ -6,10 +6,7 @@ Welcome to **NetGenie**! 🧞‍♂️ This stack sets up a simple, secure, and 
 - [Prerequisites](#prerequisites)
 - [Services Overview](#services-overview)
 - [Configuration](#configuration)
-- [Usage](#usage)
-- [Ports](#ports)
-- [Volumes](#volumes)
-- [License](#license)
+
 
 ## Prerequisites
 
