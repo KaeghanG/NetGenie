@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  # Pi-hole: Network-wide Ad Blocker
+  pihole:
+    image: pihole/pihole:latest
+    container_name: pihole
+    environment:
+      - TZ=America/New_York  # Set your time zone
+      - WEBPASSWORD=your_pihole_password  # Set your Pi-hole web password
+      - DNS1=1.1.1.1  # Upstream DNS (Cloudflare)
+      - DNS2=8.8.8.8  # Secondary DNS (Google)
+    volumes:
+      - ./pihole/config:/etc/pihole
+      - ./pihole/dnsmasq.d:/etc/dnsmasq.d
+    ports:
+      - "80:80"  # Pi-hole Web UI on port 80
+    networks:
+      - netgenie
+
+  # WireGuard: Secure VPN Service
+  wireguard:
+    image: wg-easy/wg-easy:latest
+    container_name: wireguard
+    environment:
+      - WG_HOST=your_vpn_host
+      - PASSWORD=your_wireguard_password  # Set the Web UI password
+    volumes:
+      - ./wireguard:/etc/wireguard
+    ports:
+      - "51820:51820/udp"  # WireGuard VPN Port
+    networks:
+      - netgenie
+
+  # Portainer: Docker Container Management UI
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./portainer/data:/data
+    ports:
+      - "9000:9000"  # Portainer Web UI on port 9000
+    networks:
+      - netgenie
+
+networks:
+  netgenie:
+    driver: bridge
+
